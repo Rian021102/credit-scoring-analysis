@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import numpy as np
 import pickle
 import pandas as pd
+import os
 
 app = FastAPI()
 
@@ -55,7 +56,7 @@ def predict_score(raw_data, cutoff_score, points_map_dict, num_columns):
     return score, recommendation
 
 # Load your scorecards.pkl file and create points_map_dict here
-scorecards = pd.read_pickle('/Users/rianrachmanto/pypro/project/credit-scoring-analysis/scorecards.pkl')
+scorecards = pd.read_pickle('scorecards.pkl')
 points_map_dict = get_points_map_dict(scorecards=scorecards)
 
 class InputData(BaseModel):
@@ -94,4 +95,4 @@ def predict_credit_score(input_data: InputData):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run("app:app", host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
