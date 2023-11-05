@@ -42,7 +42,7 @@ def transform_points(raw_data, points_map_dict, num_cols):
     return points_data
 
 # Function to predict the credit score
-def predict_score(raw_data, cutoff_score, points_map_dict, num_columns):
+def predict_score(raw_data, points_map_dict, num_columns):
 
     # Transform raw input values into score points
     points = transform_points(raw_data = raw_data,
@@ -54,10 +54,22 @@ def predict_score(raw_data, cutoff_score, points_map_dict, num_columns):
 
     print(f"Credit Score : ", score)
 
-    if score > cutoff_score:
-        print("Recommendation : APPROVE")
+    if score < 250:
+        print("Credit Score : Very Poor")     
+    elif score >= 250 and score < 300:
+        print("Credit Score : Poor")
+    elif score >= 300 and score < 400:
+        print("Credit Score : Fair")
+    elif score >= 400 and score < 500:
+        print("Credit Score : Good")
+    elif score >= 500 and score < 600:
+        print("Credit Score : Very Good")
+    elif score >= 600 and score < 700:
+        print("Credit Score : Exceptional")
     else:
-        print("Recommendation : REJECT")
+        print("Credit Score : Excellent")
+
+
 
     return score
 
@@ -76,17 +88,17 @@ def main():
     print(points_map_dict)
 
     input = {
-        'person_age_bin': 50,
-        'person_income_bin': 15000,
+        'person_age_bin': 25,
+        'person_income_bin': 40000,
         'person_emp_length_bin': 2,
-        'loan_amnt_bin': 9000,
+        'loan_amnt_bin': 10000,
         'loan_int_rate_bin': 8,
         'loan_percent_income_bin': 0.21,
-        'cb_person_cred_hist_length_bin': 4,
-        'person_home_ownership': 'RENT',
+        'cb_person_cred_hist_length_bin': 2,
+        'person_home_ownership': 'OWN',
         'loan_intent': 'MEDICAL',
-        'loan_grade': 'D',
-        'cb_person_default_on_file': 'Y'
+        'loan_grade': 'B',
+        'cb_person_default_on_file': 'N'
     }
     input_table = pd.DataFrame(input, index=[0])
     input_points = transform_points(raw_data=input_table,
@@ -95,7 +107,7 @@ def main():
 
     print(input_points)
 
-    input_score = predict_score(raw_data = input_table,cutoff_score = 150,points_map_dict = points_map_dict,num_columns = num_columns)
+    input_score = predict_score(raw_data = input_table,points_map_dict = points_map_dict,num_columns = num_columns)
 
 
 

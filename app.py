@@ -48,11 +48,26 @@ def transform_points(raw_data, points_map_dict, num_cols):
 
     return points_data
 
-# Define the predict_score function
-def predict_score(raw_data, cutoff_score, points_map_dict, num_columns):
+# Define the predict_score function with custom score categorization
+def predict_score(raw_data, points_map_dict, num_columns):
     points_data = transform_points(raw_data=raw_data, points_map_dict=points_map_dict, num_cols=num_columns)
     score = int(points_data.sum(axis=1))
-    recommendation = "APPROVE" if score > cutoff_score else "REJECT"
+    
+    if score < 250:
+        recommendation = "Very Poor"
+    elif score >= 250 and score < 300:
+        recommendation = "Poor"
+    elif score >= 300 and score < 400:
+        recommendation = "Fair"
+    elif score >= 400 and score < 500:
+        recommendation = "Good"
+    elif score >= 500 and score < 600:
+        recommendation = "Very Good"
+    elif score >= 600 and score < 700:
+        recommendation = "Exceptional"
+    else:
+        recommendation = "Excellent"
+        
     return score, recommendation
 
 # Load your scorecards.pkl file and create points_map_dict here
@@ -87,11 +102,10 @@ def predict_credit_score(input_data: InputData):
     ]
     score, recommendation = predict_score(
         raw_data=input_table,
-        cutoff_score=150,
         points_map_dict=points_map_dict,
         num_columns=num_columns
     )
-    return {"Credit Score": score, "Recommendation": recommendation}
+    return {"Credit Score": recommendation}
 
 if __name__ == "__main__":
     import uvicorn

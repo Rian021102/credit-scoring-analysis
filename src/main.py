@@ -541,8 +541,8 @@ def y_test_pred_proba(X_test_best,y_test,best_model):
 
 def create_factor_offset():
     # Define Factor and Offset
-    factor = 20/np.log(2)
-    offset = 300-(factor*np.log(30))
+    factor = 80/np.log(2)
+    offset = 1000-(factor*np.log(35))
 
     print(f"Offset = {offset:.2f}")
     print(f"Factor = {factor:.2f}")  
