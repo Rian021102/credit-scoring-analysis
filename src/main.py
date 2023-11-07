@@ -21,6 +21,19 @@ def loaddata(path):
     print(X_train.isnull().sum())
     return X_train,X_test,y_train,y_test,response_variable
 
+def data_processing(X_train,y_train):
+    #filter X_train where age is more than 20 and less than 60
+    X_train=X_train[(X_train['person_age']>=20) & (X_train['person_age']<=60)]
+    #allign y_train with X_train
+    y_train=y_train.loc[X_train.index]
+
+    #filter where person emp length is more than 0 and less than 40
+    X_train=X_train[(X_train['person_emp_length']>=0) & (X_train['person_emp_length']<=40)]
+    #allign y_train with X_train
+    y_train=y_train.loc[X_train.index]
+
+    return X_train,y_train
+
 def databinning(X_train, y_train,response_variable):
     num_columns = ['person_age',
                'person_income',
@@ -602,6 +615,7 @@ def create_scorecards(factor,offset,forward_models,predictors,best_model,best_mo
 def main():
 
     X_train,X_test,y_train,y_test,response_variable=loaddata('/Users/rianrachmanto/pypro/project/credit-scoring-analysis/data/credit_risk_dataset.csv')
+    X_train,y_train=data_processing(X_train,y_train)
     data_train_binned=databinning(X_train, y_train,response_variable)
     crosstab_list=create_crosstablist(data_train_binned,'loan_status') # replace response_variable with 'loan_status'
     IV_list,WOE_list=create_woe_iv(crosstab_list)
